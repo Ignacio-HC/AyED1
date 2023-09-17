@@ -47,17 +47,18 @@ minimoElemento' (x:y:xs) | x < y = minimoElemento' (x:xs)
 type Altura = Int
 type NumCamiseta = Int
 
-data Zona = Arco | Defensa | Mediocampo | Delantera
-data TipoReves =  DosManos | UnaMano
-data Modalidad = Carretera | Pista | Monte | BMX
-data PiernaHabil = Izquierda | Derecha
-data ManoHabil = PiernaHabil
+data Zona = Arco | Defensa | Mediocampo | Delantera deriving Show
+data TipoReves =  DosManos | UnaMano deriving Show
+data Modalidad = Carretera | Pista | Monte | BMX deriving Show
+data PiernaHabil = Izquierda | Derecha deriving Show
+type ManoHabil = PiernaHabil
 
-data Deportista = Ajedrecista
+data Deportista = Ajedrecista 
                 | Ciclista Modalidad
                 | Velocista Altura
                 | Tenista TipoReves ManoHabil Altura
-                | Futbolista Zona NumCamiseta PiernaHabil Altura
+                | Futbolista Zona NumCamiseta PiernaHabil Altura 
+                deriving Show
 -- b)
 {-
 ¿Cual es el tipo del constructor Ciclista?
@@ -76,3 +77,127 @@ contar_futbolistas ((Futbolista Defensa _ _ _):xs) Defensa = 1 + contar_futbolis
 contar_futbolistas ((Futbolista Mediocampo _ _ _):xs) Mediocampo = 1 + contar_futbolistas xs Mediocampo
 contar_futbolistas ((Futbolista Delantera _ _ _):xs) Delantera = 1 + contar_futbolistas xs Delantera
 contar_futbolistas (_:xs) z = contar_futbolistas xs z
+-- e)
+contar_futbolistas' :: [Deportista] -> Zona -> Int
+juegaEnZona :: Zona -> Deportista -> Bool
+juegaEnZona Arco (Futbolista Arco _ _ _) = True
+juegaEnZona Defensa (Futbolista Defensa _ _ _) = True
+juegaEnZona Mediocampo (Futbolista Mediocampo _ _ _) = True
+juegaEnZona Delantera (Futbolista Delantera _ _ _) = True
+juegaEnZona _ _ = False
+contar_futbolistas' (x:xs) z = length (filter (juegaEnZona z) xs)
+
+-- 5
+-- a)
+sonidoNatural :: NotaBasica -> Int
+sonidoNatural Do = 0
+sonidoNatural Re = 2
+sonidoNatural Mi = 4
+sonidoNatural Fa = 5
+sonidoNatural Sol = 7
+sonidoNatural La = 9
+sonidoNatural Si = 11
+-- b)
+data Alteracion = Bemol | Natural | Sostenido
+-- c)
+data NotaMusical = Nota NotaBasica Alteracion
+-- d)
+sonidoCromatico :: NotaMusical -> Int 
+sonidoCromatico (Nota n Sostenido) = sonidoNatural n + 1
+sonidoCromatico (Nota n Bemol) = sonidoNatural n - 1
+sonidoCromatico (Nota n Natural) = sonidoNatural n
+-- e)
+instance Eq NotaMusical where
+    n1 == n2 = sonidoCromatico n1 == sonidoCromatico n2
+-- f)
+instance Ord NotaMusical where
+    n1 <= n2 = sonidoCromatico n1 <= sonidoCromatico n2
+
+-- 6
+-- a)
+primerElemento :: [a] -> Maybe a
+primerElemento [] = Nothing
+primerElemento (x:xs) = Just x
+
+-- 7
+data Cola = VaciaC | Encolada Deportista Cola
+    deriving Show
+-- a)
+-- 1)
+atender :: Cola -> Maybe Cola
+atender VaciaC = Nothing
+atender (Encolada d c) = Just c
+
+--2
+encolar :: Deportista -> Cola -> Cola
+encolar dep VaciaC = Encolada dep VaciaC
+encolar dep (Encolada d c) = Encolada d (encolar dep c)
+
+--3
+busca :: Cola -> Zona -> Maybe Deportista
+busca VaciaC _ = Nothing
+busca (Encolada (Futbolista Defensa n p a) c) Defensa = Just (Futbolista Defensa n p a)
+busca (Encolada (Futbolista Arco n p a) c) Arco = Just (Futbolista Arco n p a)
+busca (Encolada (Futbolista Delantera n p a) c) Delantera = Just (Futbolista Delantera n p a)
+busca (Encolada (Futbolista Mediocampo n p a) c) Mediocampo = Just (Futbolista Mediocampo n p a)
+busca (Encolada _ c) z = busca c z
+
+-- 8
+data ListaAsoc a b = Vacia | Nodo a b (ListaAsoc a b) deriving Show
+
+type Palabra = String
+type Definicion = Palabra
+type Diccionario = ListaAsoc Palabra Definicion
+
+type Dni = Int
+type Lugar = String
+type Padron = ListaAsoc Dni Lugar
+
+-- a)
+type Nombre = String
+type Telefono = Int
+type GuiaTelefonica = ListaAsoc Nombre Telefono
+
+-- b)
+-- 1
+la_long :: ListaAsoc a b -> Int
+la_long Vacia = 0
+la_long (Nodo _ _ la) = 1 + la_long la
+
+-- 2
+la_concat :: ListaAsoc a b -> ListaAsoc a b -> ListaAsoc a b
+la_concat Vacia l2 = l2
+la_concat (Nodo a b Vacia) l2 = Nodo a b l2
+la_concat (Nodo a b la) l2 = la_concat la l2
+
+-- 3
+la_agregar :: Eq a => ListaAsoc a b -> a -> b -> ListaAsoc a b
+la_agregar Vacia a2 b2 = Nodo a2 b2 Vacia
+la_agregar (Nodo a b la) a2 b2 | a == a2 = Nodo a b2 la
+                               | otherwise = Nodo a b (la_agregar la a2 b2)
+
+-- 4
+la_pares :: ListaAsoc a b -> [(a,b)]
+la_pares Vacia = []
+la_pares (Nodo a b la) = (a,b) : la_pares la
+
+-- 5
+la_busca :: Eq a => ListaAsoc a b -> a -> Maybe b
+la_busca Vacia _ = Nothing
+la_busca (Nodo a b la) a2 | a == a2 = Just b
+                          | otherwise = la_busca la a2
+-- 6
+la_borrar :: Eq a => a -> ListaAsoc a b -> ListaAsoc a b
+la_borrar _ Vacia = Vacia
+la_borrar a2 (Nodo a b la) | a == a2 = la
+                           | otherwise = Nodo a b (la_borrar a2 la)
+
+-- 9*
+data Arbol a = Hoja | Rama ( Arbol a ) a ( Arbol a )
+
+-- a)
+a_long :: Arbol a -> Int
+a_long Hoja = 0
+a_long (Rama a1 a (Rama b a b)) = 1 + a_long 
+
+-- Rama Hoja Hoja Hoja
