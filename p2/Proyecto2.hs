@@ -198,6 +198,19 @@ data Arbol a = Hoja | Rama ( Arbol a ) a ( Arbol a )
 -- a)
 a_long :: Arbol a -> Int
 a_long Hoja = 0
-a_long (Rama a1 a (Rama b a b)) = 1 + a_long 
+a_long (Rama a1 a a2) = 1 + a_long a1 + a_long a2
 
--- Rama Hoja Hoja Hoja
+-- b)
+a_hojas :: Arbol a -> Int
+a_hojas Hoja = 1
+a_hojas (Rama a1 a a2) = a_hojas a1 + a_hojas a2
+
+-- c)
+a_inc :: Num a => Arbol a -> Arbol a
+a_inc Hoja = Hoja
+a_inc (Rama a1 n a2) = Rama (a_inc a1) (n+1) (a_inc a2)
+
+-- d)
+a_map :: (a->b) -> Arbol a -> Arbol b
+a_map _ Hoja = Hoja
+a_map f (Rama a1 a a2) = Rama (a_map f a1) (f a) (a_map f a2) 
