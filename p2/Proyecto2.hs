@@ -7,7 +7,7 @@ titulo Matematica = "Lic. en Matematica"
 titulo Fisica = "Lic. en Fisica"
 titulo Astronomia = "Lic. en Astronomia"
 -- c)
-data NotaBasica = Re |Do | Mi | Fa | Sol | La | Si deriving (Eq, Ord, Show)    
+data NotaBasica = Re | Do | Mi | Fa | Sol | La | Si deriving (Eq, Ord, Show)    
 -- d)
 cifradoAmericano :: NotaBasica -> Char
 cifradoAmericano Do = 'A'
@@ -17,6 +17,7 @@ cifradoAmericano Fa = 'D'
 cifradoAmericano Sol = 'E'
 cifradoAmericano La = 'F'
 cifradoAmericano Si = 'G'
+
 -- 2
 {-
 Debemos “instanciar” las clases Eq, Ord, y Show ya que el enunciado nos pide que se pueda operar con ≥, ≤, max, y min.
@@ -142,6 +143,9 @@ busca (Encolada (Futbolista Delantera n p a) c) Delantera = Just (Futbolista Del
 busca (Encolada (Futbolista Mediocampo n p a) c) Mediocampo = Just (Futbolista Mediocampo n p a)
 busca (Encolada _ c) z = busca c z
 
+-- b)
+-- Cola se parece a List.
+
 -- 8
 data ListaAsoc a b = Vacia | Nodo a b (ListaAsoc a b) deriving Show
 
@@ -154,9 +158,10 @@ type Lugar = String
 type Padron = ListaAsoc Dni Lugar
 
 -- a)
-type Nombre = String
-type Telefono = Int
-type GuiaTelefonica = ListaAsoc Nombre Telefono
+-- se deberia instanciar de la siguiente manera:
+-- type Nombre = String
+-- type Telefono = Int
+-- type GuiaTelefonica = ListaAsoc Nombre Telefono
 
 -- b)
 -- 1

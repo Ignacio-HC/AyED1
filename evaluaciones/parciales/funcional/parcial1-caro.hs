@@ -7,7 +7,7 @@ potencia_vehiculo :: Vehiculo -> Potencia
 potencia_vehiculo (Moto c p) = p
 potencia_vehiculo (Auto c ea p) = p
 
-instance Ord of Vehiculo
+instance Ord Vehiculo
     where v1 <= v2 = potencia_vehiculo v1 <= potencia_vehiculo v2
 
 
