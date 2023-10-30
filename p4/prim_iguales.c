@@ -31,6 +31,15 @@ int prim_iguales(int tam, int a[]) {
     return res;
 }
 
+void imprimir_arreglo(int n_max, int a[]) {
+    int i = 0;
+
+    while (i<n_max) {
+        printf("el %d-esimo valor del arreglo es: %d\n",i+1, a[i]);
+        i=i+1;
+    }
+}
+
 int main(void) {
     int a[N];
     int res;
@@ -41,6 +50,8 @@ int main(void) {
     res = prim_iguales(N,a);
     // muestro resultado
     printf("el tramo inicial mas grande con elementos iguales es de %d elementos\n", res);
+    // muestro dicho arreglo
+    imprimir_arreglo(res, a);
 
     return 0;
 }
