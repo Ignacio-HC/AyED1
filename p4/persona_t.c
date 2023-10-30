@@ -9,7 +9,7 @@ typedef struct _persona {
 } persona_t;
 
 float peso_promedio(unsigned int longitud, persona_t arr[]) {
-    int i = 0;
+    unsigned int i = 0;
     int prom = 0;
     // TODO
     while (i<longitud) {
@@ -23,7 +23,7 @@ float peso_promedio(unsigned int longitud, persona_t arr[]) {
 persona_t persona_de_mayor_edad(unsigned int longitud, persona_t arr[]) {
     persona_t res;
     res = arr[0];
-    int i = 0;
+    unsigned int i = 0;
 
     while (i<longitud) {
         if (arr[i].edad > res.edad) {
@@ -39,7 +39,7 @@ persona_t persona_de_mayor_edad(unsigned int longitud, persona_t arr[]) {
 persona_t persona_de_menor_altura(unsigned int longitud, persona_t arr[]) {
     persona_t res;
     res = arr[0];
-    int i = 0;
+    unsigned int i = 0;
 
     while (i<longitud) {
         if (arr[i].altura < res.altura) {
