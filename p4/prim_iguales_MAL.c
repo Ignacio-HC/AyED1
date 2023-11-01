@@ -101,7 +101,7 @@ int main(void) {
     // calculo
     res = prim_iguales(N,a);
     // muestro resultado
-    printf("el tramo inicial mas grande con primos iguales es de %d elementos\n", res);
+    printf("el tramo mas grande con primos iguales es de %d elementos\n", res);
 
     return 0;
 }
